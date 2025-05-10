@@ -69,103 +69,120 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.lock_outline, size: 64, color: Colors.blueAccent),
-                  SizedBox(height: 12),
-                  Text(
-                    "Welcome Back",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    "Login to your worker account",
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                  SizedBox(height: 24),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email_outlined),
-                      labelText: "Email",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Email required';
-                      if (!value.contains('@')) return 'Invalid email';
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock_outline),
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 24),
-                  isLoading
-                      ? CircularProgressIndicator()
-                      : ElevatedButton.icon(
-                        onPressed: loginWorker,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        icon: Icon(Icons.login),
-                        label: Text("Login", style: TextStyle(fontSize: 18)),
-                      ),
-                  SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text(
-                      "Don't have an account? Register",
-                      style: TextStyle(color: Colors.blueAccent),
-                    ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
                 ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.lock_outline,
+                      size: 64,
+                      color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      "Welcome Back",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "Login to your worker account",
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.email_outlined),
+                        labelText: "Email",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Email required';
+                        if (!value.contains('@')) return 'Invalid email';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.lock_outline),
+                        labelText: "Password",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton.icon(
+                          onPressed: loginWorker,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            foregroundColor:
+                                Colors.white, // Button text/icon color
+                          ),
+                          icon: const Icon(Icons.login),
+                          label: const Text(
+                            "Login",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: const Text(
+                        "Don't have an account? Register",
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

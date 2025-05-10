@@ -25,9 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isLoading = true;
     });
 
-    var url = Uri.parse(
-      "http://192.168.0.9/wtms/register_worker.php",
-    ); // adjust
+    var url = Uri.parse("http://192.168.0.9/wtms/register_worker.php");
     var response = await http.post(
       url,
       body: {
@@ -70,26 +68,113 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Worker Registration")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              buildTextField(nameController, "Full Name"),
-              buildTextField(emailController, "Email", isEmail: true),
-              buildTextField(passwordController, "Password", isPassword: true),
-              buildTextField(phoneController, "Phone Number"),
-              buildTextField(addressController, "Address"),
-              SizedBox(height: 20),
-              isLoading
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                    onPressed: registerWorker,
-                    child: Text("Register"),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
-            ],
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.person_add_alt_1,
+                      size: 64,
+                      color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      "Create Account",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    buildTextField(
+                      nameController,
+                      "Full Name",
+                      icon: Icons.person,
+                    ),
+                    buildTextField(
+                      emailController,
+                      "Email",
+                      icon: Icons.email,
+                      isEmail: true,
+                    ),
+                    buildTextField(
+                      passwordController,
+                      "Password",
+                      icon: Icons.lock,
+                      isPassword: true,
+                    ),
+                    buildTextField(
+                      phoneController,
+                      "Phone Number",
+                      icon: Icons.phone,
+                    ),
+                    buildTextField(
+                      addressController,
+                      "Address",
+                      icon: Icons.home,
+                    ),
+                    const SizedBox(height: 24),
+                    isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton.icon(
+                          onPressed: registerWorker,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            foregroundColor: Colors.white,
+                          ),
+                          icon: const Icon(Icons.app_registration),
+                          label: const Text(
+                            "Register",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // back to login
+                      },
+                      child: const Text(
+                        "Already have an account? Login",
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -99,15 +184,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget buildTextField(
     TextEditingController controller,
     String label, {
+    IconData? icon,
     bool isPassword = false,
     bool isEmail = false,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
-        decoration: InputDecoration(labelText: label),
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon ?? Icons.text_fields),
+          border: OutlineInputBorder(),
+        ),
         validator: (value) {
           if (value == null || value.isEmpty) return '$label required';
           if (isEmail && !value.contains('@')) return 'Invalid email';
