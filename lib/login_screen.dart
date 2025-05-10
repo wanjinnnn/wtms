@@ -37,12 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
       if (jsonData['status'] == 'success') {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('worker', json.encode(jsonData['worker']));
+
+        // Make sure the 'worker' is properly saved as JSON
+        var worker = jsonData['worker'];
+        await prefs.setString('worker', json.encode(worker));
 
         Navigator.pushReplacementNamed(
           context,
           '/profile',
-          arguments: jsonData['worker'],
+          arguments: worker, // Pass worker data to profile screen
         );
       } else {
         showDialog(
