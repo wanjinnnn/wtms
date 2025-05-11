@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,32 +38,84 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
     );
 
-    if (response.statusCode == 200) {
-      var msg = response.body;
-      showDialog(
-        context: context,
-        builder:
-            (_) => AlertDialog(
-              title: Text("Registration"),
-              content: Text(msg),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    if (msg.contains("success")) {
-                      Navigator.pop(context); // go back to login
-                    }
-                  },
-                  child: Text("OK"),
-                ),
-              ],
-            ),
-      );
-    }
-
     setState(() {
       isLoading = false;
     });
+
+    if (response.statusCode == 200) {
+      try {
+        final data = jsonDecode(response.body);
+        String status = data['status'];
+        String message = data['message'];
+
+        showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    Icon(
+                      status == "success" ? Icons.check_circle : Icons.error,
+                      color: status == "success" ? Colors.green : Colors.red,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      status == "success" ? "Success" : "Error",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                content: Text(message, style: const TextStyle(fontSize: 16)),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      if (status == "success") {
+                        Navigator.pop(context); // Go back to login screen
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blueAccent,
+                    ),
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+        );
+      } catch (e) {
+        _showSimpleDialog(
+          "Oops",
+          "Something went wrong. Please try again later.",
+        );
+      }
+    } else {
+      _showSimpleDialog("Error", "Server connection failed.");
+    }
+  }
+
+  void _showSimpleDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                style: TextButton.styleFrom(foregroundColor: Colors.blueAccent),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
@@ -164,7 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context); // back to login
+                        Navigator.pop(context); // Back to login
                       },
                       child: const Text(
                         "Already have an account? Login",
@@ -196,14 +249,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon ?? Icons.text_fields),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) return '$label required';
           if (isEmail && !value.contains('@')) return 'Invalid email';
-          if (isPassword && value.length < 6) {
+          if (isPassword && value.length < 6)
             return 'Password must be at least 6 characters';
-          }
           return null;
         },
       ),
