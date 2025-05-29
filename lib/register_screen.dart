@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     var url = Uri.parse(
-      "http://10.19.109.124/wtms/register_worker.php",
+      "http://192.168.54.129/wtms/register_worker.php",
     ); // for register
     var response = await http.post(
       url,

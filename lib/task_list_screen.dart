@@ -18,16 +18,21 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    workerId = ModalRoute.of(context)!.settings.arguments as int?;
-    if (workerId != null) {
-      fetchTasks();
+    final arg = ModalRoute.of(context)!.settings.arguments;
+    if (arg != null) {
+      workerId = int.tryParse(arg.toString());
+      if (workerId != null) {
+        fetchTasks();
+      }
     }
   }
 
   Future<void> fetchTasks() async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost/ctg/get_works.php'), // adjust URL if hosted
+        Uri.parse(
+          'http://192.168.54.129/wtms/get_works.php',
+        ), // adjust URL if hosted
         body: {'worker_id': workerId.toString()},
       );
 
@@ -85,6 +90,21 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   );
                 },
               ),
+      floatingActionButton: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            '/taskList',
+            arguments: int.parse(workerId.toString()), // Ensure int
+          );
+        },
+        icon: const Icon(Icons.list_alt),
+        label: const Text("View My Tasks"),
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        ),
+      ),
     );
   }
 }
