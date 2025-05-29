@@ -33,7 +33,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
     try {
       final response = await http.post(
         Uri.parse(
-          'http://192.168.54.129/wtms/submit_work.php',
+          'http://192.168.100.127/wtms/submit_work.php',
         ), // adjust if needed
         body: {
           'work_id': widget.task['id'].toString(),
@@ -44,10 +44,23 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
       final data = json.decode(response.body);
       if (data['success']) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Submission successful.")));
-        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+                title: const Text("Done"),
+                content: const Text("Submission successful."),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.pop(context); // Go back to previous screen
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+        );
       } else {
         ScaffoldMessenger.of(
           context,
