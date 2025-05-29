@@ -54,7 +54,10 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context); // Close dialog
-                      Navigator.pop(context); // Go back to previous screen
+                      Navigator.pop(
+                        context,
+                        true,
+                      ); // Go back to TaskListScreen and return true
                     },
                     child: const Text("OK"),
                   ),
@@ -80,45 +83,105 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
     final task = widget.task;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Submit Work")),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Task: ${task['title']}",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text("Due: ${task['due_date']}"),
-            const SizedBox(height: 20),
-            const Text(
-              "What did you complete?",
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _submissionController,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: "Describe your completed work here...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "Submit Work",
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black87),
+        centerTitle: true,
+      ),
+      extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.95),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Task: ${task['title']}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text("Due: ${task['due_date']}"),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "What did you complete?",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _submissionController,
+                      maxLines: 6,
+                      decoration: InputDecoration(
+                        hintText: "Describe your completed work here...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: isSubmitting ? null : submitWork,
+                        icon:
+                            isSubmitting
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                                : const Icon(Icons.send),
+                        label: const Text("Submit Report"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: isSubmitting ? null : submitWork,
-                child:
-                    isSubmitting
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text("Submit Report"),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

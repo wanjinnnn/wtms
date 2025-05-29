@@ -38,6 +38,7 @@ dependencies:
   # The following adds the http package to your application.
   http: ^0.13.6
   shared_preferences: ^2.2.2
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
