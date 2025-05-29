@@ -94,6 +94,29 @@ class ProfileScreen extends StatelessWidget {
                             label: "Address",
                             value: worker['address'],
                           ),
+                          const SizedBox(height: 20),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/taskList',
+                                arguments: worker['id'],
+                              );
+                            },
+                            icon: const Icon(Icons.list_alt),
+                            label: const Text("View My Tasks"),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                              backgroundColor: Colors.teal,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
