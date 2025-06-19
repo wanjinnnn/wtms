@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'api_config.dart'; // <-- Add this
 
 class TaskListScreen extends StatefulWidget {
   final int workerId;
@@ -24,7 +25,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Future<void> fetchTasks() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.185/wtms/get_works.php'),
+        Uri.parse('${ApiConfig.baseUrl}get_works.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
       final data = json.decode(response.body);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'api_config.dart'; // <-- Add this
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     var url = Uri.parse(
-      "http://192.168.137.185/wtms/register_worker.php",
+      "${ApiConfig.baseUrl}register_worker.php",
     ); // for register
     var response = await http.post(
       url,

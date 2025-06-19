@@ -2,8 +2,10 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
+include 'config.php';
+
 // Connect to DB
-$conn = new mysqli("localhost", "root", "", "wtms");
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Check connection
 if ($conn->connect_error) {
@@ -27,7 +29,7 @@ if ($worker_id > 0) {
 
     echo json_encode(["success" => true, "tasks" => $tasks]);
 } else {
-    echo json_encode(["success" => false, "message" => "Invalid worker ID"]);
+    echo json_encode(["success" => false, "message" => "Invalid worker_id"]);
 }
 
 $conn->close();

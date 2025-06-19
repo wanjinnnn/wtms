@@ -1,5 +1,5 @@
 <?php
-include "db_connection.php";
+include 'config.php';
 
 // Check if worker_id is set
 if (!isset($_POST['worker_id'])) {
@@ -8,6 +8,13 @@ if (!isset($_POST['worker_id'])) {
 }
 
 $worker_id = $_POST['worker_id'];
+
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+if ($conn->connect_error) {
+    echo json_encode(["status" => "error", "message" => "Connection failed"]);
+    exit;
+}
 
 $sql = "SELECT s.id, s.submission_text, s.submitted_at, w.title 
         FROM tbl_submissions s 
@@ -23,4 +30,6 @@ while ($row = $result->fetch_assoc()) {
     $submissions[] = $row;
 }
 echo json_encode($submissions);
+
+$conn->close();
 ?>

@@ -2,10 +2,12 @@
 // Enable error reporting (optional: helpful during development)
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "wtms";
+include_once 'config.php';
+
+$servername = DB_HOST;
+$username = DB_USER;
+$password = DB_PASS;
+$dbname = DB_NAME;
 
 // Create connection using MySQLi and set charset
 $conn = new mysqli($servername, $username, $password, $dbname);

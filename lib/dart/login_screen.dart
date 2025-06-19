@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main_navigation.dart';
+import 'api_config.dart'; // <-- Add this
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,9 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoading = true;
     });
 
-    var url = Uri.parse(
-      "http://192.168.137.185/wtms/login_worker.php",
-    ); // for login
+    var url = Uri.parse("${ApiConfig.baseUrl}login_worker.php"); // for login
     var response = await http.post(
       url,
       body: {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api_config.dart'; // <-- Add this
 
 class SubmitWorkScreen extends StatefulWidget {
   const SubmitWorkScreen({super.key});
@@ -28,7 +29,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.185/wtms/submit_work.php'),
+        Uri.parse('${ApiConfig.baseUrl}submit_work.php'),
         body: {
           'work_id': task['id'].toString(),
           'worker_id': workerId.toString(),

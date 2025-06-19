@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'api_config.dart'; // <-- Add this
 
 class EditProfileScreen extends StatefulWidget {
   final int workerId;
@@ -28,7 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() => isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.185/wtms/get_profile.php'),
+        Uri.parse('${ApiConfig.baseUrl}get_profile.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
       print('Response status: ${response.statusCode}');

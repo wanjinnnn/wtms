@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'api_config.dart'; // <-- Add this
 
 class SubmissionHistoryScreen extends StatefulWidget {
   final int workerId;
@@ -25,7 +26,7 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
   Future<void> fetchSubmissionHistory() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.185/wtms/get_submissions.php'),
+        Uri.parse('${ApiConfig.baseUrl}get_submissions.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
       final data = json.decode(response.body);
