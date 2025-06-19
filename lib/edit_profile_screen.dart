@@ -16,6 +16,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final addressController = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -38,6 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         nameController.text = data['profile']['full_name'] ?? '';
         emailController.text = data['profile']['email'] ?? '';
         phoneController.text = data['profile']['phone'] ?? '';
+        addressController.text = data['profile']['address'] ?? '';
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'] ?? 'Failed to load profile')),
@@ -62,15 +64,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         'full_name': nameController.text,
         'email': emailController.text,
         'phone': phoneController.text,
+        'address': addressController.text,
       },
     );
     final data = json.decode(response.body);
     setState(() => isLoading = false);
-    if (data['success']) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully!')),
-      );
-      // Update local storage with new profile data
+    if (data['success'] == true) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('worker', json.encode(data['profile']));
       Navigator.pop(context, true);
@@ -120,6 +119,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         validator:
                             (v) =>
                                 v == null || v.isEmpty ? 'Enter phone' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: addressController,
+                        decoration: const InputDecoration(labelText: 'Address'),
+                        validator:
+                            (v) =>
+                                v == null || v.isEmpty ? 'Enter address' : null,
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(

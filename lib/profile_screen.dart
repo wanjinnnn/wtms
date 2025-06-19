@@ -23,11 +23,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> loadWorker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? workerJson = prefs.getString('worker');
-    if (workerJson != null) {
-      setState(() {
-        worker = json.decode(workerJson);
-      });
-    }
+    setState(() {
+      worker = workerJson != null ? json.decode(workerJson) : null;
+    });
   }
 
   @override
@@ -126,8 +124,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
+                            onPressed: () async {
+                              final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
@@ -138,6 +136,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                 ),
                               );
+                              if (result == true) {
+                                await loadWorker(); // This updates the worker variable and calls setState
+                              }
                             },
                             icon: const Icon(Icons.edit),
                             label: const Text("Edit Profile"),
