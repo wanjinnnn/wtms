@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'api_config.dart'; // <-- Add this
+import 'api_config.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final int workerId;
@@ -17,6 +17,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final addressController = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -32,20 +33,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         Uri.parse('${ApiConfig.baseUrl}get_profile.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
       final data = json.decode(response.body);
-      if (data['success']) {
-        nameController.text = data['profile']['full_name'] ?? '';
-        emailController.text = data['profile']['email'] ?? '';
-        phoneController.text = data['profile']['phone'] ?? '';
+      if (data['status'] != 'error') {
+        nameController.text = data['full_name'] ?? '';
+        emailController.text = data['email'] ?? '';
+        phoneController.text = data['phone'] ?? '';
+        addressController.text = data['address'] ?? '';
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'] ?? 'Failed to load profile')),
         );
       }
     } catch (e) {
-      print('Error fetching profile: $e');
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error loading profile')));
@@ -57,17 +56,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => isLoading = true);
     final response = await http.post(
-      Uri.parse('http://192.168.137.185/wtms/update_profile.php'),
+      Uri.parse('${ApiConfig.baseUrl}update_profile.php'),
       body: {
         'worker_id': widget.workerId.toString(),
         'full_name': nameController.text,
         'email': emailController.text,
         'phone': phoneController.text,
+        'address': addressController.text,
       },
     );
     final data = json.decode(response.body);
     setState(() => isLoading = false);
-    if (data['success']) {
+    if (data['status'] == 'success') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile updated successfully!')),
       );
@@ -121,6 +121,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         validator:
                             (v) =>
                                 v == null || v.isEmpty ? 'Enter phone' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: addressController,
+                        decoration: const InputDecoration(labelText: 'Address'),
+                        validator:
+                            (v) =>
+                                v == null || v.isEmpty ? 'Enter address' : null,
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(

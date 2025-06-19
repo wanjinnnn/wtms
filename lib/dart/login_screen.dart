@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoading = true;
     });
 
-    var url = Uri.parse("${ApiConfig.baseUrl}login_worker.php"); // for login
+    var url = Uri.parse('${ApiConfig.baseUrl}login_worker.php');
     var response = await http.post(
       url,
       body: {
@@ -33,6 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
         "password": passwordController.text,
       },
     );
+
+    print('Status: ${response.statusCode}');
+    print('Body: ${response.body}');
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);

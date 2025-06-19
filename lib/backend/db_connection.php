@@ -11,7 +11,7 @@ $dbname = DB_NAME;
 
 // Create connection using MySQLi and set charset
 $conn = new mysqli($servername, $username, $password, $dbname);
-$conn->set_charset("utf8mb4"); // Good practice to avoid encoding issues
+$conn->set_charset("utf8mb4"); 
 
 // Check connection
 if ($conn->connect_error) {
