@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
-import 'profile_screen.dart';
-import 'task_list_screen.dart';
 
 void main() {
   runApp(WTMSApp());
@@ -20,8 +18,6 @@ class WTMSApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
-        '/profile': (context) => ProfileScreen(),
-        '/taskList': (context) => TaskListScreen(),
       },
     );
   }

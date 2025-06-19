@@ -3,14 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SubmitWorkScreen extends StatefulWidget {
-  final Map<String, dynamic> task;
-  final int workerId;
-
-  const SubmitWorkScreen({
-    super.key,
-    required this.task,
-    required this.workerId,
-  });
+  const SubmitWorkScreen({super.key});
 
   @override
   State<SubmitWorkScreen> createState() => _SubmitWorkScreenState();
@@ -19,6 +12,9 @@ class SubmitWorkScreen extends StatefulWidget {
 class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
   final TextEditingController _submissionController = TextEditingController();
   bool isSubmitting = false;
+  late Map<String, dynamic> task;
+  late int workerId;
+  bool initialized = false;
 
   Future<void> submitWork() async {
     if (_submissionController.text.isEmpty) {
@@ -32,12 +28,10 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse(
-          'http://192.168.100.127/wtms/submit_work.php',
-        ), // adjust if needed
+        Uri.parse('http://192.168.198.1/wtms/submit_work.php'),
         body: {
-          'work_id': widget.task['id'].toString(),
-          'worker_id': widget.workerId.toString(),
+          'work_id': task['id'].toString(),
+          'worker_id': workerId.toString(),
           'submission_text': _submissionController.text,
         },
       );
@@ -54,10 +48,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context); // Close dialog
-                      Navigator.pop(
-                        context,
-                        true,
-                      ); // Go back to TaskListScreen and return true
+                      Navigator.pop(context, true); // Return to previous screen
                     },
                     child: const Text("OK"),
                   ),
@@ -80,7 +71,14 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final task = widget.task;
+    // Receive arguments from Navigator
+    if (!initialized) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      task = args['task'];
+      workerId = args['workerId'];
+      initialized = true;
+    }
 
     return Scaffold(
       appBar: AppBar(

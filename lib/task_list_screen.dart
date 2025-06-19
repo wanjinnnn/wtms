@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'submit_work_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class TaskListScreen extends StatefulWidget {
-  const TaskListScreen({super.key});
+  final int workerId;
+  const TaskListScreen({super.key, required this.workerId});
 
   @override
   State<TaskListScreen> createState() => _TaskListScreenState();
@@ -14,25 +14,18 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   List<dynamic> tasks = [];
   bool isLoading = true;
-  int? workerId;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final arg = ModalRoute.of(context)!.settings.arguments;
-    if (arg != null) {
-      workerId = int.tryParse(arg.toString());
-      if (workerId != null) {
-        fetchTasks();
-      }
-    }
+  void initState() {
+    super.initState();
+    fetchTasks();
   }
 
   Future<void> fetchTasks() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.100.127/wtms/get_works.php'),
-        body: {'worker_id': workerId.toString()},
+        Uri.parse('http://192.168.198.1/wtms/get_works.php'),
+        body: {'worker_id': widget.workerId.toString()},
       );
       final data = json.decode(response.body);
       if (data['success']) {
@@ -70,9 +63,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'My Tasks',
@@ -183,9 +174,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child:
-                                              (task['status'] == 'Completed')
+                                              task['status'] == 'Completed'
                                                   ? ElevatedButton.icon(
-                                                    onPressed: null, // Disabled
+                                                    onPressed: null,
                                                     icon: const Icon(
                                                       Icons
                                                           .assignment_turned_in,
@@ -209,21 +200,18 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                                   : ElevatedButton.icon(
                                                     onPressed: () async {
                                                       final result =
-                                                          await Navigator.push(
+                                                          await Navigator.pushNamed(
                                                             context,
-                                                            MaterialPageRoute(
-                                                              builder:
-                                                                  (
-                                                                    _,
-                                                                  ) => SubmitWorkScreen(
-                                                                    task: task,
-                                                                    workerId:
-                                                                        workerId!,
-                                                                  ),
-                                                            ),
+                                                            '/submit',
+                                                            arguments: {
+                                                              'task': task,
+                                                              'workerId':
+                                                                  widget
+                                                                      .workerId,
+                                                            },
                                                           );
                                                       if (result == true) {
-                                                        fetchTasks(); // Refresh the task list if submission was successful
+                                                        fetchTasks(); // Refresh the task list
                                                       }
                                                     },
                                                     icon: const Icon(

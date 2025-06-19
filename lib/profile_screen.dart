@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final int workerId;
+  const ProfileScreen({super.key, required this.workerId});
 
   @override
   Widget build(BuildContext context) {
+    // Use workerId as needed
     final Map<String, dynamic> worker =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
