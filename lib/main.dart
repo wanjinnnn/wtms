@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
+import 'submit_work_screen.dart';
 
 void main() {
-  runApp(WTMSApp());
+  runApp(const WTMSApp());
 }
 
 class WTMSApp extends StatelessWidget {
@@ -18,6 +19,7 @@ class WTMSApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
+        '/submit': (context) => const SubmitWorkScreen(),
       },
     );
   }

@@ -17,6 +17,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
   bool initialized = false;
 
   Future<void> submitWork() async {
+    print('Submitting for task: $task, workerId: $workerId');
     if (_submissionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please enter your completion report.")),
@@ -71,10 +72,10 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Receive arguments from Navigator
     if (!initialized) {
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      print('SubmitWorkScreen args: $args'); // Debug print
       task = args['task'];
       workerId = args['workerId'];
       initialized = true;

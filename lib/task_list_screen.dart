@@ -33,6 +33,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
           tasks = data['tasks'];
           isLoading = false;
         });
+        for (var t in tasks) {
+          print('Task: ${t['title']}, Status: ${t['status']}');
+        }
       } else {
         showError(data['message']);
       }
