@@ -60,10 +60,6 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Submission History'),
-        backgroundColor: Colors.teal,
-      ),
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())

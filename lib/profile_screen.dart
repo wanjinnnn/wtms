@@ -48,28 +48,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Text(
-                        "Worker Profile",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.logout, color: Colors.redAccent),
-                      onPressed: () async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.clear();
-                        Navigator.pushReplacementNamed(context, '/');
-                      },
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 16),
                 Expanded(
                   child: Center(
