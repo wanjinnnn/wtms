@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           horizontal: 24,
                           vertical: 12,
                         ),
-                        backgroundColor: Colors.orange,
+                        backgroundColor: Colors.teal,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
