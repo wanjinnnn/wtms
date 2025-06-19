@@ -45,7 +45,8 @@ class FullSubmissionScreen extends StatelessWidget {
                   final updated = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      (_) => EditSubmissionScreen(submission: submission),
+                      builder:
+                          (_) => EditSubmissionScreen(submission: submission),
                     ),
                   );
                   if (updated == true) {

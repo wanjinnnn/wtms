@@ -28,12 +28,13 @@ class _EditSubmissionScreenState extends State<EditSubmissionScreen> {
     setState(() => isSaving = true);
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.185/wtms/update_submission.php'),
+        Uri.parse('http://192.168.137.185/wtms/edit_submission.php'),
         body: {
           'submission_id': widget.submission['id'].toString(),
           'submission_text': _submissionController.text,
         },
       );
+      print('Update response: ${response.body}');
       final data = json.decode(response.body);
       if (data['success']) {
         if (mounted) {
