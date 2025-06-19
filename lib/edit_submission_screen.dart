@@ -34,7 +34,6 @@ class _EditSubmissionScreenState extends State<EditSubmissionScreen> {
           'submission_text': _submissionController.text,
         },
       );
-      print('Update response: ${response.body}');
       final data = json.decode(response.body);
       if (data['success']) {
         if (mounted) {
@@ -61,74 +60,142 @@ class _EditSubmissionScreenState extends State<EditSubmissionScreen> {
         title: const Text('Edit Submission'),
         backgroundColor: Colors.teal,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.submission['task_title'] ?? '',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _submissionController,
-                maxLines: 6,
-                decoration: const InputDecoration(
-                  labelText: 'Submission Text',
-                  border: OutlineInputBorder(),
-                ),
-                validator:
-                    (v) =>
-                        v == null || v.isEmpty ? 'Enter your submission' : null,
-              ),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed:
-                      isSaving
-                          ? null
-                          : () async {
-                            final confirmed = await showDialog<bool>(
-                              context: context,
-                              builder:
-                                  (_) => AlertDialog(
-                                    title: const Text('Confirm Update'),
-                                    content: const Text(
-                                      'Are you sure you want to update this submission?',
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed:
-                                            () => Navigator.pop(context, false),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed:
-                                            () => Navigator.pop(context, true),
-                                        child: const Text('Update'),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                            if (confirmed == true) {
-                              await saveEdit();
-                            }
-                          },
-                  icon: const Icon(Icons.save),
-                  label: const Text('Save Changes'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+            child: Container(
+              padding: const EdgeInsets.all(28),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.97),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 16,
+                    offset: Offset(0, 8),
                   ),
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.assignment_turned_in,
+                          color: Colors.teal[700],
+                          size: 28,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            widget.submission['task_title'] ?? '',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _submissionController,
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        labelText: 'Submission Text',
+                        alignLabelWithHint: true,
+                        filled: true,
+                        fillColor: Colors.teal[50],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator:
+                          (v) =>
+                              v == null || v.isEmpty
+                                  ? 'Enter your submission'
+                                  : null,
+                    ),
+                    const SizedBox(height: 32),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed:
+                            isSaving
+                                ? null
+                                : () async {
+                                  final confirmed = await showDialog<bool>(
+                                    context: context,
+                                    builder:
+                                        (_) => AlertDialog(
+                                          title: const Text('Confirm Update'),
+                                          content: const Text(
+                                            'Are you sure you want to update this submission?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    false,
+                                                  ),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    true,
+                                                  ),
+                                              child: const Text('Update'),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                  if (confirmed == true) {
+                                    await saveEdit();
+                                  }
+                                },
+                        icon:
+                            isSaving
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                                : const Icon(Icons.save),
+                        label: const Text('Save Changes'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

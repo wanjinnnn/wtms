@@ -32,8 +32,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         Uri.parse('http://192.168.137.185/wtms/get_profile.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
       final data = json.decode(response.body);
       if (data['success']) {
         nameController.text = data['profile']['full_name'] ?? '';
@@ -46,10 +44,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       }
     } catch (e) {
-      print('Error fetching profile: $e');
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error loading profile')));
+      ).showSnackBar(const SnackBar(content: Text('Error loading profile')));
     }
     setState(() => isLoading = false);
   }
@@ -87,68 +84,123 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: const Text('Edit Profile'),
         backgroundColor: Colors.teal,
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      TextFormField(
-                        controller: nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Full Name',
-                        ),
-                        validator:
-                            (v) => v == null || v.isEmpty ? 'Enter name' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: emailController,
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        validator:
-                            (v) =>
-                                v == null || v.isEmpty ? 'Enter email' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: phoneController,
-                        decoration: const InputDecoration(labelText: 'Phone'),
-                        validator:
-                            (v) =>
-                                v == null || v.isEmpty ? 'Enter phone' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: addressController,
-                        decoration: const InputDecoration(labelText: 'Address'),
-                        validator:
-                            (v) =>
-                                v == null || v.isEmpty ? 'Enter address' : null,
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton.icon(
-                        onPressed: saveProfile,
-                        icon: const Icon(Icons.save),
-                        label: const Text("Save"),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          backgroundColor: Colors.orange,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+            child: Container(
+              padding: const EdgeInsets.all(28),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.97),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 16,
+                    offset: Offset(0, 8),
                   ),
-                ),
+                ],
               ),
+              child:
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.edit,
+                              size: 48,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: nameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Full Name',
+                                prefixIcon: Icon(Icons.person),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator:
+                                  (v) =>
+                                      v == null || v.isEmpty
+                                          ? 'Enter name'
+                                          : null,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                labelText: 'Email',
+                                prefixIcon: Icon(Icons.email),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator:
+                                  (v) =>
+                                      v == null || v.isEmpty
+                                          ? 'Enter email'
+                                          : null,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: phoneController,
+                              decoration: const InputDecoration(
+                                labelText: 'Phone',
+                                prefixIcon: Icon(Icons.phone),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator:
+                                  (v) =>
+                                      v == null || v.isEmpty
+                                          ? 'Enter phone'
+                                          : null,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                labelText: 'Address',
+                                prefixIcon: Icon(Icons.home),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator:
+                                  (v) =>
+                                      v == null || v.isEmpty
+                                          ? 'Enter address'
+                                          : null,
+                            ),
+                            const SizedBox(height: 32),
+                            ElevatedButton.icon(
+                              onPressed: saveProfile,
+                              icon: const Icon(Icons.save),
+                              label: const Text("Save"),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 14,
+                                ),
+                                backgroundColor: Colors.orange,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

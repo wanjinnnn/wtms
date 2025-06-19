@@ -45,99 +45,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 16),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.95),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CircleAvatar(
-                            radius: 40,
-                            backgroundColor: Colors.blueAccent,
-                            child: Icon(
-                              Icons.person,
-                              size: 50,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            "Profile Details",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          ProfileRow(
-                            label: "Worker ID",
-                            value: worker!['id'].toString(),
-                          ),
-                          ProfileRow(
-                            label: "Full Name",
-                            value: worker!['full_name'],
-                          ),
-                          ProfileRow(label: "Email", value: worker!['email']),
-                          ProfileRow(label: "Phone", value: worker!['phone']),
-                          ProfileRow(
-                            label: "Address",
-                            value: worker!['address'],
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => EditProfileScreen(
-                                        workerId: int.parse(
-                                          worker!['id'].toString(),
-                                        ),
-                                      ),
-                                ),
-                              );
-                              if (result == true) {
-                                await loadWorker(); // This updates the worker variable and calls setState
-                              }
-                            },
-                            icon: const Icon(Icons.edit),
-                            label: const Text("Edit Profile"),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
-                              ),
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                        ],
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.97),
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 16,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircleAvatar(
+                      radius: 48,
+                      backgroundColor: Colors.blueAccent,
+                      child: Icon(Icons.person, size: 60, color: Colors.white),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      worker!['full_name'],
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    Text(
+                      worker!['email'],
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    ProfileRow(
+                      label: "Worker ID",
+                      value: worker!['id'].toString(),
+                    ),
+                    ProfileRow(label: "Phone", value: worker!['phone']),
+                    ProfileRow(label: "Address", value: worker!['address']),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => EditProfileScreen(
+                                  workerId: int.parse(worker!['id'].toString()),
+                                ),
+                          ),
+                        );
+                        if (result == true) {
+                          await loadWorker();
+                        }
+                      },
+                      icon: const Icon(Icons.edit),
+                      label: const Text("Edit Profile"),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

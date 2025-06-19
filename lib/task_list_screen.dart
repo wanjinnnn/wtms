@@ -71,10 +71,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
             child: Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 Expanded(
                   child:
                       isLoading
@@ -90,46 +90,32 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                   vertical: 10,
                                 ),
                                 child: Card(
-                                  color: Colors.white.withOpacity(0.95),
-                                  elevation: 4,
+                                  elevation: 6,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(18),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(18.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          task['title'] ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          task['description'] ?? '',
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                        const SizedBox(height: 8),
                                         Row(
                                           children: [
-                                            const Icon(
-                                              Icons.calendar_today,
-                                              size: 16,
-                                              color: Colors.blueGrey,
+                                            Icon(
+                                              Icons.assignment,
+                                              color: Colors.teal[700],
                                             ),
-                                            const SizedBox(width: 6),
-                                            Text(
-                                              "Due: ${formatDate(task['due_date'] ?? '')}",
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.blueGrey,
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                task['title'] ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                            const Spacer(),
                                             Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -159,7 +145,33 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          task['description'] ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
                                         const SizedBox(height: 12),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.calendar_today,
+                                              size: 16,
+                                              color: Colors.blueGrey,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              "Due: ${formatDate(task['due_date'] ?? '')}",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 14),
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child:
@@ -200,7 +212,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                                             },
                                                           );
                                                       if (result == true) {
-                                                        fetchTasks(); // Refresh the task list
+                                                        fetchTasks();
                                                       }
                                                     },
                                                     icon: const Icon(

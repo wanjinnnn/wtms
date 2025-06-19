@@ -60,60 +60,96 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : submissions.isEmpty
-              ? const Center(child: Text("No submissions yet."))
-              : ListView.builder(
-                itemCount: submissions.length,
-                itemBuilder: (context, index) {
-                  final sub = submissions[index];
-                  return InkWell(
-                    onTap: () async {
-                      final updated = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => FullSubmissionScreen(submission: sub),
-                        ),
-                      );
-                      if (updated == true) {
-                        fetchSubmissionHistory(); // Refresh the list
-                      }
-                    },
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              sub['task_title'] ?? '',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+            child:
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : submissions.isEmpty
+                    ? const Center(child: Text("No submissions yet."))
+                    : ListView.builder(
+                      itemCount: submissions.length,
+                      itemBuilder: (context, index) {
+                        final sub = submissions[index];
+                        return InkWell(
+                          onTap: () async {
+                            final updated = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) =>
+                                        FullSubmissionScreen(submission: sub),
+                              ),
+                            );
+                            if (updated == true) {
+                              fetchSubmissionHistory();
+                            }
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            elevation: 6,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.assignment_turned_in,
+                                        color: Colors.teal[700],
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          sub['task_title'] ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_today,
+                                        size: 16,
+                                        color: Colors.blueGrey,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        "Submitted on: ${formatDate(sub['submitted_at'] ?? '')}",
+                                        style: const TextStyle(
+                                          color: Colors.blueGrey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "Submitted on: ${formatDate(sub['submitted_at'] ?? '')}",
-                              style: const TextStyle(color: Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
+          ),
+        ),
+      ),
     );
   }
 }
