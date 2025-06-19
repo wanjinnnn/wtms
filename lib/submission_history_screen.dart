@@ -25,7 +25,7 @@ class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
   Future<void> fetchSubmissionHistory() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.198.1/wtms/get_submissions.php'),
+        Uri.parse('http://192.168.137.185/wtms/get_submissions.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
       final data = json.decode(response.body);

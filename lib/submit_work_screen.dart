@@ -28,7 +28,7 @@ class _SubmitWorkScreenState extends State<SubmitWorkScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.198.1/wtms/submit_work.php'),
+        Uri.parse('http://192.168.137.185/wtms/submit_work.php'),
         body: {
           'work_id': task['id'].toString(),
           'worker_id': workerId.toString(),

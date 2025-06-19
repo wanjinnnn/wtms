@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main_navigation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     var url = Uri.parse(
-      "http://192.168.198.1/wtms/login_worker.php",
+      "http://192.168.137.185/wtms/login_worker.php",
     ); // for login
     var response = await http.post(
       url,
@@ -42,7 +43,15 @@ class _LoginScreenState extends State<LoginScreen> {
         var worker = jsonData['worker'];
         await prefs.setString('worker', json.encode(worker));
 
-        Navigator.pushReplacementNamed(context, '/profile', arguments: worker);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder:
+                (_) => MainNavigation(
+                  workerId: int.parse(worker['id'].toString()),
+                ),
+          ),
+        );
       } else {
         showDialog(
           context: context,

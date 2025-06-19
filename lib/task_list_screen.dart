@@ -24,7 +24,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Future<void> fetchTasks() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.198.1/wtms/get_works.php'),
+        Uri.parse('http://192.168.137.185/wtms/get_works.php'),
         body: {'worker_id': widget.workerId.toString()},
       );
       final data = json.decode(response.body);

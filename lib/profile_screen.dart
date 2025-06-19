@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'edit_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   final int workerId;
   const ProfileScreen({super.key, required this.workerId});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  Map<String, dynamic>? worker;
+
+  @override
+  void initState() {
+    super.initState();
+    loadWorker();
+  }
+
+  Future<void> loadWorker() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? workerJson = prefs.getString('worker');
+    if (workerJson != null) {
+      setState(() {
+        worker = json.decode(workerJson);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Use workerId as needed
-    final Map<String, dynamic> worker =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    if (worker == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       body: Container(
@@ -85,34 +110,43 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          ProfileRow(label: "Worker ID", value: worker['id']),
+                          ProfileRow(
+                            label: "Worker ID",
+                            value: worker!['id'].toString(),
+                          ),
                           ProfileRow(
                             label: "Full Name",
-                            value: worker['full_name'],
+                            value: worker!['full_name'],
                           ),
-                          ProfileRow(label: "Email", value: worker['email']),
-                          ProfileRow(label: "Phone", value: worker['phone']),
+                          ProfileRow(label: "Email", value: worker!['email']),
+                          ProfileRow(label: "Phone", value: worker!['phone']),
                           ProfileRow(
                             label: "Address",
-                            value: worker['address'],
+                            value: worker!['address'],
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton.icon(
                             onPressed: () {
-                              Navigator.pushNamed(
+                              Navigator.push(
                                 context,
-                                '/taskList',
-                                arguments: worker['id'],
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => EditProfileScreen(
+                                        workerId: int.parse(
+                                          worker!['id'].toString(),
+                                        ),
+                                      ),
+                                ),
                               );
                             },
-                            icon: const Icon(Icons.list_alt),
-                            label: const Text("View My Tasks"),
+                            icon: const Icon(Icons.edit),
+                            label: const Text("Edit Profile"),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                                 vertical: 12,
                               ),
-                              backgroundColor: Colors.teal,
+                              backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
